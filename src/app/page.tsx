@@ -17,7 +17,7 @@ export default function Home() {
   console.log({ profiles: publications });
 
   useEffect(() => {
-    if (publications && publications.length < scrolled + 2 && !loading && hasMore) {
+    if (publications && publications.length < scrolled + 1 && !loading && hasMore) {
       next();
     }
   }, [scrolled])
