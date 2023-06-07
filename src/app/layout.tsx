@@ -38,7 +38,7 @@ const client = createClient({
 
 const lensConfig: LensConfig = {
   bindings: wagmiBindings(),
-  environment: production,
+  environment: development,
 };
 
 const inter = Inter({ subsets: ['latin'] })

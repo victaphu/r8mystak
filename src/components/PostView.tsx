@@ -15,6 +15,7 @@ import { MirrorIcon } from './icons/MirrorIcon'
 import { HeartIcon } from './icons/HeartIcon'
 import { CollectIcon } from './icons/CollectIcon'
 import useOnScreen from '@/hook/useOnScreen'
+import Link from 'next/link'
 
 
 function Publication({
@@ -34,7 +35,7 @@ function Publication({
     if (publicationData) {
       let publication = JSON.parse(JSON.stringify(publicationData));
       if (publication.mirrorOf) {
-        const { mirrorOf, ...original} = publication
+        const { mirrorOf, ...original } = publication
         publication = publication.mirrorOf
         publication.original = original
       }
@@ -111,11 +112,12 @@ function Publication({
     <div
       className={publicationContainerStyle(backgroundColor)}
     >
-      <div
-       onClick={onPublicationPress}
-       className={topLevelContentStyle}
-      >
-         {
+      <Link href={`/profile/${profile.id}`}>
+        <div
+          onClick={onPublicationPress}
+          className={topLevelContentStyle}
+        >
+          {
             publication.original && (
               <div className={mirroredByContainerStyle}>
                 <MirrorIcon color={ThemeColor.mediumGray} />
@@ -123,36 +125,37 @@ function Publication({
               </div>
             )
           }
-        <div className={profileContainerStyle}>
+          <div className={profileContainerStyle}>
+            <div>
+              {
+                profile.picture?.uri || profile.picture?.original?.url ? (
+                  <img
+                    src={
+                      profile.picture.__typename === 'NftImage' ?
+                        profile.picture.uri : profile.picture?.original?.url
+                    }
+                    className={profilePictureStyle}
+                  />
+                ) : (
+                  <div
+                    className={profilePictureStyle}
+                  />
+                )
+              }
+            </div>
+            <div className={profileDetailsContainerStyle(color)}>
+              <p className={profileNameStyle}>{profile.name || profile.handle}</p>
+              <p className={dateStyle}> {formatDistance(new Date(publication.createdAt), new Date())}</p>
+            </div>
+          </div>
           <div>
-            {
-             profile.picture?.uri || profile.picture?.original?.url ? (
-                <img
-                  src={
-                    profile.picture.__typename === 'NftImage' ?
-                    profile.picture.uri : profile.picture?.original?.url
-                  }
-                  className={profilePictureStyle}
-                />
-              ) : (
-                <div
-                  className={profilePictureStyle}
-                />
-              )
-            }
-          </div>
-          <div className={profileDetailsContainerStyle(color)}>
-            <p className={profileNameStyle}>{profile.name || profile.handle}</p>
-            <p className={dateStyle}> {formatDistance(new Date(publication.createdAt), new Date())}</p>
+            <ReactMarkdown
+              className={markdownStyle(color)}
+              rehypePlugins={[rehypeRaw]}
+            >{formatHandleColors(getSubstring(publication.metadata.content, 339))}</ReactMarkdown>
           </div>
         </div>
-        <div>
-          <ReactMarkdown
-            className={markdownStyle(color)}
-            rehypePlugins={[rehypeRaw]}
-          >{formatHandleColors(getSubstring(publication.metadata.content, 339))}</ReactMarkdown>
-        </div>
-      </div>
+      </Link>
       {
         media && media.type == 'image' && (
           <div className={imageContainerStyle}>
@@ -245,7 +248,7 @@ const mediaImageStyle = css`
   display: block;
 `
 
-const markdownStyle = (color : string) => css`
+const markdownStyle = (color: string) => css`
   color: ${color};
   overflow: hidden;
   p {
@@ -332,7 +335,7 @@ const dateStyle = css`
   opacity: .75;
 `
 
-const profileDetailsContainerStyle = (color : string) => css`
+const profileDetailsContainerStyle = (color: string) => css`
   display: flex;
   flex-direction: column;
   margin-left: 7px;
@@ -345,7 +348,7 @@ const profileDetailsContainerStyle = (color : string) => css`
 interface PostArgs {
   publicationData: any,
   scrollIn: () => void,
-  scrollOut: () => void  
+  scrollOut: () => void
 };
 
 function fetchUrl(url: string) {
@@ -358,7 +361,7 @@ function fetchUrl(url: string) {
 export default function PostView({ publicationData, scrollIn, scrollOut }: PostArgs) {
   const elementRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useOnScreen(elementRef);
-  
+
   useEffect(() => {
     isOnScreen ? scrollIn() : scrollOut();
   }, [isOnScreen])
@@ -368,5 +371,5 @@ export default function PostView({ publicationData, scrollIn, scrollOut }: PostA
     return <div ref={elementRef}>PLACEHOLDER</div>
   }
   console.log(publicationData.id, 'rendering')
-  return <div className='w-full h-full' ref={elementRef}><Publication publicationData={publicationData} onClick={()=>{console.log('clicked')}}/></div>
+  return <div className='w-full h-full' ref={elementRef}><Publication publicationData={publicationData} onClick={() => { console.log('clicked') }} /></div>
 }
