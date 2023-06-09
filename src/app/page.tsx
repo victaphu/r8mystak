@@ -17,8 +17,6 @@ export default function Home() {
     }
   });
 
-  console.log('>>>', hasMore, loading, data, publications);
-
   useEffect(() => {
     if (publications && data.length < scrolled + 2 && !loading && hasMore) {
       next();
