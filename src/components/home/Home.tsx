@@ -1,5 +1,3 @@
-/*  const { data, error: profileError, loading } = useActiveProfile();
-*/
 "use client"
 import PostView from '@/components/publications/PostView';
 import { useExplorePublications, PublicationMainFocus, PublicationTypes, AnyPublication } from '@lens-protocol/react-web'
@@ -10,9 +8,6 @@ export default function Home() {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   })
-  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
 
   const [scrolled, setScrolled] = useState(0);
   const [data, setData] = useState<AnyPublication[]>([])

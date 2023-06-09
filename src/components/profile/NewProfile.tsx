@@ -15,7 +15,7 @@ function NewProfile() {
     })
   }
 
-  return (<div className='w-screen h-screen'>
+  return (<div className='w-screen h-screen absolute'>
     <dialog id="my_modal_3" className="modal modal-open">
   <form method="dialog" className="modal-box">
     <h3 className="font-bold text-lg">Welcome to R8 My Stack!</h3>

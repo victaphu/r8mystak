@@ -16,7 +16,17 @@ import { HeartIcon } from '../icons/HeartIcon'
 import { CollectIcon } from '../icons/CollectIcon'
 import useOnScreen from '@/hook/useOnScreen'
 import Link from 'next/link'
+import { FaInstagram, FaTiktok, FaCommentDollar } from 'react-icons/fa';
+import axios from 'axios'
+import fetchCurrentRegisteredLikes from '@/lib/StaksController'
+import { useAccount, useClient } from 'wagmi'
 
+interface Stats {
+  "instaLikes": 0,
+  "tiktokLikes": 0,
+  "postLikes": 0,
+  "distributed": 0,
+}
 
 function Publication({
   onClick,
@@ -31,6 +41,28 @@ function Publication({
   ipfsGateway?: string
 }) {
   let [publication, setPublication] = useState<any>(publicationData)
+  let [stats, setStats] = useState<Stats>({
+    "instaLikes": 0,
+    "tiktokLikes": 0,
+    "postLikes": 0,
+    "distributed": 0,
+  });
+
+  const {provider} = useClient()
+
+  async function fetchStats(connector: any) {
+    const likes = await axios.post('/api/socials', {postId: publication.id})
+    const stats = {...likes.data, distributed: +(await fetchCurrentRegisteredLikes(publication.id, connector))}
+    console.log(stats)
+    setStats(stats);
+  }
+
+  useEffect(() => {
+    if (publicationData && provider) {
+      fetchStats(provider);
+    }
+  }, [publicationData, provider])
+
   useEffect(() => {
     if (publicationData) {
       let publication = JSON.parse(JSON.stringify(publicationData));
@@ -43,18 +75,7 @@ function Publication({
       setPublication(publication)
     }
   }, [publicationData])
-  // async function fetchPublication() {
-  //   try {
-  //     const { data } = await client
-  //       .query(getPublication, {
-  //         publicationId
-  //       })
-  //      .toPromise()
-  //      setPublication(data.publication)
-  //   } catch (err) {
-  //     console.log('error fetching piublication: ', err)
-  //   }
-  // }
+  
   function onPublicationPress() {
     if (onClick) {
       onClick()
@@ -197,21 +218,23 @@ function Publication({
           <p>{publication.stats.totalAmountOfComments}</p>
         </div>
         <div className={reactionContainerStyle(reactionTextColor, reactionBgColor)}>
-          <MirrorIcon color={reactionTextColor} />
-          <p>{publication.stats.totalAmountOfMirrors}</p>
-        </div>
-        <div className={reactionContainerStyle(reactionTextColor, reactionBgColor)}>
           <HeartIcon color={reactionTextColor} />
           <p>{publication.stats.totalUpvotes}</p>
         </div>
+        <div className={reactionContainerStyle(reactionTextColor, reactionBgColor)}>
+          <FaInstagram/>
+          <p>{stats.instaLikes}</p>
+        </div>
+        <div className={reactionContainerStyle(reactionTextColor, reactionBgColor)}>
+          <FaTiktok color={reactionTextColor} />
+          <p>{stats.tiktokLikes}</p>
+        </div>
         {
-          publication.stats.totalAmountOfCollects > Number(0) && (
-            <div className={reactionContainerStyle(reactionTextColor, reactionBgColor)}>
-              <CollectIcon color={reactionTextColor} />
-              <p>{publication.stats.totalAmountOfCollects}</p>
-            </div>
-          )
+          profile.ownedByMe &&
+          <button className='btn text-xs'>Farm {(stats.instaLikes + stats.tiktokLikes + stats.postLikes) - stats.distributed} STK</button>
         }
+        
+        
       </div>
     </div>
   )

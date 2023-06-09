@@ -1,17 +1,21 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { AiOutlineLogout } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
-import { IoMdAdd } from 'react-icons/io';
 
 import LoginButton from './Login';
+import { useAccount } from 'wagmi';
+import { useActiveProfile, useProfilesOwnedByMe } from '@lens-protocol/react-web';
+import NewProfile from './profile/NewProfile';
 
 const Navbar = () => {
+  const { isConnected } = useAccount();
+  const { data: profile, error: profileError, loading: loadingProfile } = useProfilesOwnedByMe();
 
+  console.log(isConnected, loadingProfile, profile)
 
   return (
     <div className='w-full flex justify-between items-center border-b-2 border-gray-200 py-2 px-4 fixed z-50 bg-slate-300 btm-nav'>
+      {isConnected && !loadingProfile && !profile && <NewProfile/>} 
       <Link href='/'>
         <div className='w-[100px] md:w-[129px] md:h-[30px] h-[38px]'>
           R8 My Stack

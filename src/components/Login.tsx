@@ -1,5 +1,5 @@
 "use client"
-import { useWalletLogin } from '@lens-protocol/react-web';
+import { useProfilesOwnedByMe, useWalletLogin } from '@lens-protocol/react-web';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 export default function LoginButton() {
