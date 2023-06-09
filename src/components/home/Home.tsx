@@ -1,3 +1,5 @@
+/*  const { data, error: profileError, loading } = useActiveProfile();
+*/
 "use client"
 import PostView from '@/components/publications/PostView';
 import { useExplorePublications, PublicationMainFocus, PublicationTypes, AnyPublication } from '@lens-protocol/react-web'

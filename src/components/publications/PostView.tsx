@@ -9,11 +9,11 @@ import { formatDistance } from 'date-fns'
 import ReactPlayer from 'react-player'
 import { Theme, ThemeColor } from '@lens-protocol/widgets-react'
 import { formatHandleColors, formatProfilePicture, getSubstring, returnIpfsPathOrUrl, systemFonts } from '@/lib/utils'
-import { AudioPlayer } from './AudioPlayer'
-import { MessageIcon } from './icons/MessageIcon'
-import { MirrorIcon } from './icons/MirrorIcon'
-import { HeartIcon } from './icons/HeartIcon'
-import { CollectIcon } from './icons/CollectIcon'
+import { AudioPlayer } from '../AudioPlayer'
+import { MessageIcon } from '../icons/MessageIcon'
+import { MirrorIcon } from '../icons/MirrorIcon'
+import { HeartIcon } from '../icons/HeartIcon'
+import { CollectIcon } from '../icons/CollectIcon'
 import useOnScreen from '@/hook/useOnScreen'
 import Link from 'next/link'
 
@@ -112,7 +112,7 @@ function Publication({
     <div
       className={publicationContainerStyle(backgroundColor)}
     >
-      <Link href={`/profile/${profile.id}`}>
+      <Link href={`/profile/${profile.handle}?profileId=${profile.id}`}>
         <div
           onClick={onPublicationPress}
           className={topLevelContentStyle}
@@ -347,8 +347,8 @@ const profileDetailsContainerStyle = (color: string) => css`
 
 interface PostArgs {
   publicationData: any,
-  scrollIn: () => void,
-  scrollOut: () => void
+  scrollIn?: () => void,
+  scrollOut?: () => void
 };
 
 function fetchUrl(url: string) {
@@ -363,8 +363,10 @@ export default function PostView({ publicationData, scrollIn, scrollOut }: PostA
   const isOnScreen = useOnScreen(elementRef);
 
   useEffect(() => {
-    isOnScreen ? scrollIn() : scrollOut();
-  }, [isOnScreen])
+    if (scrollIn && scrollOut) {
+      isOnScreen ? scrollIn() : scrollOut();
+    }
+  }, [isOnScreen, scrollIn, scrollOut])
 
   if (!isOnScreen) {
     console.log(publicationData.id, 'not rendering')

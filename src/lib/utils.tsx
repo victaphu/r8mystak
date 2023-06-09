@@ -1,4 +1,4 @@
-import { Profile } from '@lens-protocol/react-web'
+import { Profile } from '@/types/types'
 import {
   Theme, Size, ThemeColor
 } from '@lens-protocol/widgets-react'
