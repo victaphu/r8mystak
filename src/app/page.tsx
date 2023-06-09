@@ -1,44 +1,44 @@
 "use client"
 import PostView from '@/components/PostView';
-import { useExploreProfiles, useExplorePublications, PublicationMainFocus, PublicationTypes, Post } from '@lens-protocol/react-web'
-import { Publication } from '@lens-protocol/widgets-react';
-import Image from 'next/image'
+import { useExplorePublications, PublicationMainFocus, PublicationTypes, AnyPublication } from '@lens-protocol/react-web'
 import { useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(0);
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
-  })
-  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
-  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
-
-  
+  const [ data, setData ] = useState<AnyPublication[]>([])
   const { data: publications, hasMore, loading, next } = useExplorePublications({
     limit: 5,
     publicationTypes: [PublicationTypes.Post],
     metadataFilter: {
-      restrictPublicationMainFocusTo: [PublicationMainFocus.Video]
+      restrictPublicationMainFocusTo: [PublicationMainFocus.Video],
+      restrictPublicationTagsTo: {
+        oneOf: ["r8mystak"]
+      }
     }
   });
-  console.log(hasMore, loading, publications, scrolled)
-  
+
+  console.log('>>>', hasMore, loading, data, publications);
+
   useEffect(() => {
-    if (publications && publications.length < scrolled + 3 && !loading && hasMore) {
-      console.log("load more")
+    if (publications && data.length < scrolled + 2 && !loading && hasMore) {
       next();
     }
-  }, [scrolled])
+  }, [hasMore, loading, next, data, publications, scrolled])
 
-  // todo: window of currently active views
+  useEffect(() => {    
+    if (publications) {
+      console.log('publications', publications, data, 'reloading')
+      setData((prev: AnyPublication[]) : AnyPublication[] => {
+        return [...prev, ...publications.filter(e=>prev.find(v=>v.id === e.id) !== null)]
+      })
+    }
+  }, [publications])
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between gap-4">
-      <div className={"h-screen w-full carousel carousel-vertical rounded-box"}>
+    <main className="flex min-h-screen flex-col items-center justify-between">
+      <div className="h-screen w-full carousel carousel-vertical rounded-box">
         {
-          publications?.map((e, idx) => { return (<div key={idx} className={"mb-2 w-full relative carousel-item " + (!isDesktopOrLaptop ? "h-full" : "")}>
+          data?.map((e, idx) => { return (<div key={idx} className="w-full h-full relative carousel-item">
             <PostView publicationData={e} scrollIn={() => {console.log(e.id, 'scroll in'); setScrolled(idx)}} scrollOut={() => {console.log(e.id, 'scroll.out')}}/>
           </div>)})
         }
