@@ -23,10 +23,12 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (publications && data.length < scrolled + 2 && !loading && hasMore) {
+    if (data.length < scrolled + 2 && !loading && hasMore) {
+      if (data.length < 3) return;
+      console.log("reloading!");
       next();
     }
-  }, [hasMore, loading, next, data, publications, scrolled])
+  }, [hasMore, loading, next, data, scrolled])
 
   useEffect(() => {
     if (publications) {

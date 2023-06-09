@@ -4,12 +4,14 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 export default function LoginButton() {
   const { execute: login } = useWalletLogin();
-  const { isConnected } = useAccount();
+  const { isConnected, address, isConnecting, isDisconnected } = useAccount();
   const { connectors } = useConnect();
   const { disconnect, disconnectAsync } = useDisconnect();
   const { connectAsync } = useConnect({
     connector: connectors[1],
   });
+
+  console.log('>>>', isConnected, address, isConnecting, isDisconnected);
 
   const onLoginClick = async () => {
     if (isConnected) {
