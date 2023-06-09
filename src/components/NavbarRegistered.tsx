@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { BiSearch } from 'react-icons/bi';
 
-import LoginButton from './Login';
 import { useActiveProfile, useActiveProfileSwitch, useProfilesOwnedByMe, useWalletLogin, useWalletLogout } from '@lens-protocol/react-web';
 import NewProfile from './profile/NewProfile';
 import { FaHome, FaPlusSquare, FaSignOutAlt, FaUser } from 'react-icons/fa';
@@ -21,7 +18,7 @@ const Register = () => {
 
   useEffect(() => {
     if (!isPending && !loadingProfile && profile) {
-      execute(profile[0].id);
+      execute(profile[0]?.id);
     }
   }, [isPending, profile, loadingProfile])
 

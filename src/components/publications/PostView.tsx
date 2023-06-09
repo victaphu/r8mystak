@@ -58,10 +58,10 @@ function Publication({
   }
 
   useEffect(() => {
-    if (publicationData && provider) {
+    if (publication && provider) {
       fetchStats(provider);
     }
-  }, [publicationData, provider])
+  }, [publication, provider])
 
   useEffect(() => {
     if (publicationData) {

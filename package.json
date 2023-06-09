@@ -22,8 +22,10 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "daisyui": "^2.52.0",
+    "ecdh": "^0.2.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
+    "eth-crypto": "^2.6.0",
     "ethers": "^5.7.2",
     "hls.js": "^1.4.4",
     "next": "13.4.4",
@@ -33,9 +35,13 @@
     "react-icons": "^4.9.0",
     "react-player": "^2.12.0",
     "react-responsive": "^9.0.2",
+    "secp256k1": "^5.0.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4",
     "wagmi": "^0.12.7",
     "zustand": "^4.3.8"
+  },
+  "browser": {
+    "crypto": false
   }
 }
