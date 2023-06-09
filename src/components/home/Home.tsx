@@ -37,6 +37,8 @@ export default function Home() {
     }
   }, [publications])
 
+  console.log("Resetting");
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <div className={"h-screen w-full carousel carousel-vertical rounded-box " + (isDesktopOrLaptop ? "items-center" : "")}>

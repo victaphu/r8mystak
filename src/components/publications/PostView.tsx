@@ -129,6 +129,8 @@ function Publication({
     cover = returnIpfsPathOrUrl(publication.metadata.cover.original.url, ipfsGateway)
   }
 
+  console.log("is this being reloaded heaps of time?");
+
   return (
     <div
       className={publicationContainerStyle(backgroundColor)}
