@@ -14,7 +14,7 @@ export default function Page({ params, searchParams }: any) {
 
   console.log(data, publicationLoading, hasMore);
   
-  if (loading) {
+  if (loading || publicationLoading) {
     return <div className="w-full"><span className="loading loading-bars loading-lg"> Loading ...</span></div>
   }
   return (<div className="flex w-full h-full items-center">
