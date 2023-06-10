@@ -40,13 +40,16 @@ export default function Home() {
   }, [publications])
 
   console.log("Resetting");
+  if (!data || data.length === 0) {
+    return <div><span className="loading loading-ball text-3xl"></span></div>
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
-      <div className={"h-screen w-full carousel carousel-vertical rounded-box " + (isDesktopOrLaptop ? "items-center" : "")}>
+      <div className={"h-screen w-full carousel carousel-vertical rounded-box items-center " + (isDesktopOrLaptop ? "items-center" : "")}>
         {
           data?.map((e, idx) => {
-            return (<div key={idx} className={" h-full relative " + (isDesktopOrLaptop ? " pb-4" : "  carousel-item")}>
+            return (<div key={idx} className={" h-full relative " + (isDesktopOrLaptop ? " pb-4" : "  w-full  carousel-item")}>
               <PostView publicationData={e} scrollIn={() => { console.log(e.id, 'scroll in'); setScrolled(idx) }} scrollOut={() => { console.log(e.id, 'scroll.out') }} />
             </div>)
           })

@@ -39,6 +39,7 @@ export function Profile({
        }
     }
   }
+  console.log("Profile rendering");
 
   if (!profile) return null
 

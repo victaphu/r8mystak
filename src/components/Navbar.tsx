@@ -1,4 +1,5 @@
-import React from 'react';
+"use client"
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { BiSearch } from 'react-icons/bi';
 
@@ -8,11 +9,16 @@ import Register from './NavbarRegistered';
 import { useAccount } from 'wagmi';
 
 const Navbar = () => {
-  const { isPending } = useWalletLogin()
+  const { isPending, execute } = useWalletLogin()
   const { isConnected } = useAccount()
   const { data, loading } = useActiveWallet()
+  
 
-  console.log('updating repeatedly')
+  console.log('updating repeatedly', isConnected, isPending, loading, data)
+  useEffect(() => {
+    if (loading) return;
+    if (!data) return;
+  }, [data, loading])
   return (
     <div className='w-full flex justify-between items-center border-b-2 border-gray-200 py-2 px-4 fixed z-50 bg-slate-300 btm-nav'>
       <Link href='/'>

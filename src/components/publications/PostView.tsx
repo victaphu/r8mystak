@@ -13,13 +13,12 @@ import { AudioPlayer } from '../AudioPlayer'
 import { MessageIcon } from '../icons/MessageIcon'
 import { MirrorIcon } from '../icons/MirrorIcon'
 import { HeartIcon } from '../icons/HeartIcon'
-import { CollectIcon } from '../icons/CollectIcon'
 import useOnScreen from '@/hook/useOnScreen'
 import Link from 'next/link'
 import { FaInstagram, FaTiktok, FaCommentDollar } from 'react-icons/fa';
 import axios from 'axios'
 import fetchCurrentRegisteredLikes from '@/lib/StaksController'
-import { useAccount, useClient } from 'wagmi'
+import { useClient } from 'wagmi'
 
 interface Stats {
   "instaLikes": 0,
@@ -41,6 +40,7 @@ function Publication({
   ipfsGateway?: string
 }) {
   let [publication, setPublication] = useState<any>(publicationData)
+  let [publicationId, setPublicationId] = useState<any>();
   let [stats, setStats] = useState<Stats>({
     "instaLikes": 0,
     "tiktokLikes": 0,
@@ -51,17 +51,17 @@ function Publication({
   const {provider} = useClient()
 
   async function fetchStats(connector: any) {
-    const likes = await axios.post('/api/socials', {postId: publication.id})
-    const stats = {...likes.data, distributed: +(await fetchCurrentRegisteredLikes(publication.id, connector))}
-    console.log(stats)
+    const likes = await axios.post('/api/socials', {postId: publicationId})
+    const stats = {...likes.data, distributed: +(await fetchCurrentRegisteredLikes(publicationId, connector))}
+    console.log("Loading from server", stats)
     setStats(stats);
   }
 
   useEffect(() => {
-    if (publication && provider) {
+    if (publicationId && provider) {
       fetchStats(provider);
     }
-  }, [publication, provider])
+  }, [publicationId, provider])
 
   useEffect(() => {
     if (publicationData) {
@@ -73,6 +73,9 @@ function Publication({
       }
       publication.profile = formatProfilePicture(publication.profile)
       setPublication(publication)
+      if (publication.id != publicationId) {
+        setPublicationId(publication.id);
+      }
     }
   }, [publicationData])
   
@@ -128,8 +131,6 @@ function Publication({
   if (publication.metadata.cover) {
     cover = returnIpfsPathOrUrl(publication.metadata.cover.original.url, ipfsGateway)
   }
-
-  console.log("is this being reloaded heaps of time?");
 
   return (
     <div
@@ -393,10 +394,6 @@ export default function PostView({ publicationData, scrollIn, scrollOut }: PostA
     }
   }, [isOnScreen, scrollIn, scrollOut])
 
-  if (!isOnScreen) {
-    console.log(publicationData.id, 'not rendering')
-    return <div ref={elementRef}>PLACEHOLDER</div>
-  }
   console.log(publicationData.id, 'rendering')
   return <div className='w-full h-full' ref={elementRef}><Publication publicationData={publicationData} onClick={() => { console.log('clicked') }} /></div>
 }

@@ -7,7 +7,7 @@ export function Publications({
 } : {
   publications?: any[]
 }) {
-  
+  console.log("publications loading??")
 
   return (
     <div className={publicationsContainerStyle}>
