@@ -1,9 +1,6 @@
-import {
-  useEffect, useState
-} from 'react'
+"use client"
 import { css } from '@emotion/css'
 import PublicationComponent from './PostView'
-import { Theme } from '@/types/types'
 
 export function Publications({
   publications

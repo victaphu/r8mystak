@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+"use client"
+import { useState } from 'react'
 import { css } from '@emotion/css'
 import { Profile, ThemeColor, ProfileHandle, Theme } from '@/types/types'
 
