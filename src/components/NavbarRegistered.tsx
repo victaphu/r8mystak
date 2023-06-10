@@ -17,11 +17,14 @@ const Register = () => {
   const { data: activeProfile } = useActiveProfile();
 
   useEffect(() => {
+    if (activeProfile) {
+      return;
+    }
     if (!isPending && !loadingProfile && profile && profile.length > 0) {
       console.log("selecting the profile!")
       execute(profile[0]?.id);
     }
-  }, [isPending, profile, loadingProfile])
+  }, [isPending, profile, loadingProfile, activeProfile])
 
   console.log(">>>", isPending, loadingProfile, profile)
 
