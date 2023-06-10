@@ -32,7 +32,7 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
       theme: 'light',
       loginMethodsOrder: ['google'],
       appName: 'R8 My STAK',
-      appLogo: 'https://v1.madnfts.io/logo.svg' // Your App Logo Here
+      appLogo: '/images/logo.png' // Your App Logo Here
     }
   })
 
