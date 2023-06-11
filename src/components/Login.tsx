@@ -47,10 +47,8 @@ export default function LoginButton() {
       </button>
     );
   } else {
-    return (
-      <button className='btn btn-primary' onClick={onLoginClick}>
-        Connect
-      </button>
-    );
+    return (<button className='btn btn-primary' onClick={onLoginClick}>
+      Connect
+    </button>)
   }
 }

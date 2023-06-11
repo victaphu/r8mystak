@@ -33,13 +33,17 @@ export default function Home() {
   useEffect(() => {
     if (publications) {
       console.log('publications', publications, data, 'reloading')
-      setData((prev: AnyPublication[]): AnyPublication[] => {
-        return [...prev, ...publications.filter(e => prev.find(v => v.id === e.id) !== null)]
-      })
+      const add = data == null || data.length === 0 ? publications : publications.filter(e=> data.find((f => f.id === e.id)) === null);
+      console.log('adding', add)
+      if (add.length > 0) {
+        setData((prev: AnyPublication[]): AnyPublication[] => {
+          return [...prev, ...add]
+        })
+      }
     }
   }, [publications])
 
-  console.log("Resetting");
+  console.log("Resetting", data);
   if (!data || data.length === 0) {
     return <div><span className="loading loading-ball text-3xl"></span></div>
   }
@@ -49,7 +53,7 @@ export default function Home() {
       <div className={"h-screen w-full carousel carousel-vertical rounded-box items-center " + (isDesktopOrLaptop ? "items-center" : "")}>
         {
           data?.map((e, idx) => {
-            return (<div key={idx} className={" h-full relative carousel-item " + (isDesktopOrLaptop ? " pb-4" : "  w-full")}>
+            return (<div key={e.id} className={" h-full relative carousel-item " + (isDesktopOrLaptop ? " pb-4" : "  w-full")}>
               <PostView publicationData={e} scrollIn={() => { console.log(e.id, 'scroll in'); setScrolled(idx) }} scrollOut={() => { console.log(e.id, 'scroll.out') }} />
             </div>)
           })
