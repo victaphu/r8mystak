@@ -14,7 +14,7 @@ export default function LoginButton() {
 
   useEffect(() => {
     if (!isDisconnected) return;
-
+  
     // if wagmi.connected set to true, then wagmi will not show modal
     // to reconnect user wallet, but instead will use prev connection
     // I found this example in this public repo: https://github.com/sumicet/web3auth-modal-wagmi

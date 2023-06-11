@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from 'react';
 
 import { useActiveProfile, useActiveProfileSwitch, useProfilesOwnedByMe, useWalletLogin, useWalletLogout } from '@lens-protocol/react-web';
