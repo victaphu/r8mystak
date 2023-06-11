@@ -134,7 +134,7 @@ function Publication({
 
   return (
     <div
-      className={publicationContainerStyle(backgroundColor)}
+      className={publicationContainerStyle(backgroundColor) + " h-full"}
     >
       <Link href={`/profile/${profile.handle}?profileId=${profile.id}`}>
         <div

@@ -38,7 +38,7 @@ const Register = () => {
   }
   console.log('updating repeatedly')
   return (
-    <div className='w-full flex justify-between items-center border-b-2 border-gray-200 py-2 px-4 fixed z-50 bg-slate-300 btm-nav'>
+    <div className='w-full flex justify-between items-center border-b-2 border-gray-600 py-2 px-4 fixed z-50 bg-gray-600 btm-nav'>
       <button onClick={e=>window.location.href="/"}>
         <FaHome />
       </button>

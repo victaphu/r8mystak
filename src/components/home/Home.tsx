@@ -49,7 +49,7 @@ export default function Home() {
       <div className={"h-screen w-full carousel carousel-vertical rounded-box items-center " + (isDesktopOrLaptop ? "items-center" : "")}>
         {
           data?.map((e, idx) => {
-            return (<div key={idx} className={" h-full relative " + (isDesktopOrLaptop ? " pb-4" : "  w-full  carousel-item")}>
+            return (<div key={idx} className={" h-full relative carousel-item " + (isDesktopOrLaptop ? " pb-4" : "  w-full")}>
               <PostView publicationData={e} scrollIn={() => { console.log(e.id, 'scroll in'); setScrolled(idx) }} scrollOut={() => { console.log(e.id, 'scroll.out') }} />
             </div>)
           })
