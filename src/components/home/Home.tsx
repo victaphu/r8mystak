@@ -12,7 +12,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(0);
   const [data, setData] = useState<AnyPublication[]>([])
   const { data: publications, hasMore, loading, next } = useExplorePublications({
-    limit: 5,
+    limit: 10,
     publicationTypes: [PublicationTypes.Post],
     metadataFilter: {
       restrictPublicationMainFocusTo: [PublicationMainFocus.Video],
@@ -24,7 +24,6 @@ export default function Home() {
 
   useEffect(() => {
     if (data.length < scrolled + 2 && !loading && hasMore) {
-      if (data.length < 3) return;
       console.log("reloading!");
       next();
     }

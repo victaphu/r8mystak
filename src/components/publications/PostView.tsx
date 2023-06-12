@@ -19,6 +19,7 @@ import { FaInstagram, FaTiktok, FaCommentDollar } from 'react-icons/fa';
 import axios from 'axios'
 import fetchCurrentRegisteredLikes from '@/lib/StaksController'
 import { useClient } from 'wagmi'
+import { useActiveWallet } from '@lens-protocol/react-web'
 
 interface Stats {
   "instaLikes": 0,
@@ -41,6 +42,10 @@ function Publication({
 }) {
   let [publication, setPublication] = useState<any>(publicationData)
   let [publicationId, setPublicationId] = useState<any>();
+
+  const [isFarming, setFarming] = useState(false);
+  
+  const {data, loading} = useActiveWallet();
   let [stats, setStats] = useState<Stats>({
     "instaLikes": 0,
     "tiktokLikes": 0,
@@ -49,6 +54,7 @@ function Publication({
   });
 
   const {provider} = useClient()
+  console.log("WALLET IS", data)
 
   async function fetchStats(connector: any) {
     const likes = await axios.post('/api/socials', {postId: publicationId})
@@ -130,6 +136,23 @@ function Publication({
   }
   if (publication.metadata.cover) {
     cover = returnIpfsPathOrUrl(publication.metadata.cover.original.url, ipfsGateway)
+  }
+
+  const farm = async () => {
+    if (isFarming) return; // already farming
+    setFarming(true);
+    if (publication && publication.id) {
+      const result = await axios.post(`/api/farm`, {
+        postId: publication.id
+      })
+
+      alert('Farmed!' + result.data.message)
+      console.log("Farmed", result.data);
+      setFarming((prev) => {
+        return false;
+      })
+      fetchStats(provider);
+    }
   }
 
   return (
@@ -233,8 +256,8 @@ function Publication({
           <p>{stats.tiktokLikes}</p>
         </div>
         {
-          profile.ownedByMe &&
-          <button className='btn text-xs'>Farm {(stats.instaLikes + stats.tiktokLikes + stats.postLikes) - stats.distributed} STK</button>
+          data && profile.ownedBy === data.address &&
+          <button className='btn text-xs' disabled={((stats.instaLikes + stats.tiktokLikes + stats.postLikes) - stats.distributed) <= 0 || isFarming} onClick={farm}>Farm {(stats.instaLikes + stats.tiktokLikes + stats.postLikes) - stats.distributed} STK</button>
         }
         
         
